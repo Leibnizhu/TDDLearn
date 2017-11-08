@@ -17,45 +17,44 @@ public class Ship {
         return planet;
     }
 
-    public boolean moveForward() {
-        return location.forward(planet.getMax());
+    public String moveForward() {
+        return location.forward(planet.getMax(), planet.getObstacles()) ? "O" : "X";
     }
 
-    public boolean moveBackward() {
-        return location.backward(planet.getMax());
+    public String moveBackward() {
+        return location.backward(planet.getMax(), planet.getObstacles()) ? "O" : "X";
     }
 
-    public Ship turnLeft() {
+    public String turnLeft() {
         location.turnLeft();
-        return this;
+        return "O";
     }
 
-    public Ship turnRight() {
+    public String turnRight() {
         location.turnRight();
-        return this;
+        return "O";
     }
 
-    public void receiveCommand(String command) {
+    public String receiveCommand(String command) {
         switch (command) {
             case "F":
-                moveForward();
-                break;
+                return moveForward();
             case "B":
-                moveBackward();
-                break;
+                return moveBackward();
             case "L":
-                turnLeft();
-                break;
+                return turnLeft();
             case "R":
-                turnRight();
-                break;
+                return turnRight();
             default:
         }
+        return "X";
     }
 
-    public void receiveCommands(String commands) {
+    public String receiveCommands(String commands) {
+        StringBuilder sbuf = new StringBuilder();
         for(String command : commands.split("")){
-            receiveCommand(command);
+            sbuf.append(receiveCommand(command));
         }
+        return sbuf.toString();
     }
 }

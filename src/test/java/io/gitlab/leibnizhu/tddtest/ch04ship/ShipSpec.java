@@ -3,6 +3,9 @@ package io.gitlab.leibnizhu.tddtest.ch04ship;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.testng.Assert.assertEquals;
 
 @Test
@@ -13,8 +16,12 @@ public class ShipSpec {
 
     @BeforeMethod //等价于JUint的@Before
     public void beforeTest() {
+        Point max = new Point(50, 50);
         this.location = new Location(new Point(21, 13), Direction.NORTH);
-        this.planet = new Planet(new Point(50, 50));
+        List<Point> obstacles = new ArrayList<>();
+        obstacles.add(new Point(44, 44));
+        obstacles.add(new Point(45, 46));
+        this.planet = new Planet(max, obstacles);
         this.ship = new Ship(this.location, this.planet);
     }
 
@@ -134,13 +141,39 @@ public class ShipSpec {
     }
 
     /**
-     * 倒退超越东边边界
+     * 倒退超越西边边界
      */
-    public void whenBackwardOverpassEastBoundaryThenGoWest(){
+    public void whenBackwardOverpassWestBoundaryThenGoWest(){
         location.setDirection(Direction.EAST);
-        location.getPoint().setX(planet.getMax().getX());
-        ship.turnRight().turnRight();
+        location.getPoint().setX(1);
         ship.receiveCommand("B");
-        assertEquals(location.getX(), 1);
+        assertEquals(location.getX(), planet.getMax().getX());
+    }
+
+    /**
+     * 遇到陆地障碍
+     */
+    public void whenReceiveCommandsThenStopOnObstacle() {
+        //设置障碍
+        List<Point> obstacles = new ArrayList<>();
+        obstacles.add(new Point(location.getX() + 1, location.getY()));
+        ship.getPlanet().setObstacles(obstacles);
+        //期望地点
+        Location expected = location.copy();
+        expected.turnRight();
+        expected.forward(planet.getMax(), obstacles);
+        expected.turnLeft();
+        expected.backward(new Point(0, 0), obstacles);
+        //发出指令
+        ship.receiveCommands("RFLB");
+        assertEquals(ship.getLocation(), expected);
+    }
+
+    public void whenReceiveCommandsThenOForOkAndXForObstacle() {
+        List<Point> obstacles = new ArrayList<>();
+        obstacles.add(new Point(location.getX() + 1, location.getY()));
+        ship.getPlanet().setObstacles(obstacles);
+        String status = ship.receiveCommands("RFLB");
+        assertEquals(status, "OXOO");
     }
 }
