@@ -1,0 +1,21 @@
+group 'io.gitlab.leibnizhu'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'org.testng:testng:6.8.21'
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+    useTestNG()
+    useJUnit()
+}
