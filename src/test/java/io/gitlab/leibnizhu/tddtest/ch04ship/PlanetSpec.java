@@ -23,6 +23,7 @@ public class PlanetSpec {
     }
 
     public void whenInstantiatedThenMaxIsSet() {
+        planet = new Planet(max);
         assertEquals(planet.getMax(), max);
     }
 

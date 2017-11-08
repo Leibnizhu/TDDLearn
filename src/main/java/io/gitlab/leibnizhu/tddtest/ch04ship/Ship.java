@@ -36,6 +36,9 @@ public class Ship {
     }
 
     public String receiveCommand(String command) {
+        if(command == null || command.trim().length() == 0){
+            return "X";
+        }
         switch (command) {
             case "F":
                 return moveForward();

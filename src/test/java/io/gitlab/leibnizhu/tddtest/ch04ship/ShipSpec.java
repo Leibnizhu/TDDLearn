@@ -19,8 +19,9 @@ public class ShipSpec {
         Point max = new Point(50, 50);
         this.location = new Location(new Point(21, 13), Direction.NORTH);
         List<Point> obstacles = new ArrayList<>();
-        obstacles.add(new Point(44, 44));
-        obstacles.add(new Point(45, 46));
+        obstacles.add(new Point(44, 46));
+        obstacles.add(new Point(22, 46));
+        obstacles.add(new Point(45, 13));
         this.planet = new Planet(max, obstacles);
         this.ship = new Ship(this.location, this.planet);
     }
@@ -111,6 +112,12 @@ public class ShipSpec {
         expected.turnRight();
         ship.receiveCommand("R");
         assertEquals(ship.getLocation(), expected);
+        ship.receiveCommand("hhahah");
+        assertEquals(ship.getLocation(), expected);
+        ship.receiveCommand(null);
+        assertEquals(ship.getLocation(), expected);
+        ship.receiveCommand("   ");
+        assertEquals(ship.getLocation(), expected);
     }
 
     /**
@@ -118,8 +125,8 @@ public class ShipSpec {
      */
     public void whenReceiveCommands() {
         Location expected = location.copy();
-        expected.forward();
-        expected.backward();
+        expected.forward(planet.getMax());
+        expected.backward(planet.getMax());
         expected.turnLeft();
         ship.receiveCommands("FBL");
         assertEquals(ship.getLocation(), expected);
@@ -155,7 +162,7 @@ public class ShipSpec {
      */
     public void whenReceiveCommandsThenStopOnObstacle() {
         //设置障碍
-        List<Point> obstacles = new ArrayList<>();
+        List<Point> obstacles = planet.getObstacles();
         obstacles.add(new Point(location.getX() + 1, location.getY()));
         ship.getPlanet().setObstacles(obstacles);
         //期望地点
@@ -173,7 +180,7 @@ public class ShipSpec {
         List<Point> obstacles = new ArrayList<>();
         obstacles.add(new Point(location.getX() + 1, location.getY()));
         ship.getPlanet().setObstacles(obstacles);
-        String status = ship.receiveCommands("RFLB");
-        assertEquals(status, "OXOO");
+        assertEquals(ship.receiveCommands("RFLB"), "OXOO");
+        assertEquals(ship.receiveCommands("FLB"), "OOX");
     }
 }

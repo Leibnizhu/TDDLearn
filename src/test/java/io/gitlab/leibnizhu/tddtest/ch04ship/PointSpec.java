@@ -23,4 +23,10 @@ public class PointSpec {
         assertEquals(point.getY(), y);
     }
 
+    public void equalTest(){
+        assertFalse(point.equals(""));
+        assertFalse(point.equals(new Point(11,21)));
+        assertFalse(point.equals(new Point(12,22)));
+        assertTrue(point.equals(new Point(12,21)));
+    }
 }

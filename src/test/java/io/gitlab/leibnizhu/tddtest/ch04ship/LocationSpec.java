@@ -171,4 +171,17 @@ public class LocationSpec {
         assertFalse(location.backward(max, obstacles));
     }
 
+    /**
+     * 没有方向
+     */
+    public void whenNoDirectionThenStay(){
+        Location expected = location.copy();
+        location.setDirection(Direction.NONE);
+        location.forward();
+        assertEquals(location.getPoint(), expected.getPoint());
+    }
+
+    public void equalTest(){
+        assertFalse(location.equals(null));
+    }
 }

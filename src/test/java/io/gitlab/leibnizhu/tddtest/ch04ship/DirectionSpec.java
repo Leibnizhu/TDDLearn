@@ -1,10 +1,15 @@
 package io.gitlab.leibnizhu.tddtest.ch04ship;
 
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
 
 @Test
 public class DirectionSpec {
+
+    public void whenValueOfThenGetRightEnum(){
+        assertEquals(Direction.valueOf("NORTH"), Direction.NORTH);
+    }
 
     public void whenGetFromShortNameNThenReturnDirectionN() {
         Direction direction = Direction.getFromShortName('N');
