@@ -7,9 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * @author Leibniz.Hu
@@ -139,19 +137,68 @@ public class Connect4TDDSpec {
     /**
      * #5 开始游戏时肯定未结束
      */
-    public void whenGameStartThenNotFinished(){
+    public void whenGameStartThenNotFinished() {
         assertFalse(connect4.isFinished(), "The game must not be finished");
     }
 
     /**
      * #5 全部填满时结束
      */
-    public void whenNoDiscCanBeInsertedThenGameIsFinished(){
-        for(int row = 0; row < 6;row++){
-            for(int column = 0; column<7;column++){
+    public void whenNoDiscCanBeInsertedThenGameIsFinished() {
+        for (int row = 0; row < 6; row++) {
+            for (int column = 0; column < 7; column++) {
                 connect4.putDiscInColumn(column);
             }
         }
         assertTrue(connect4.isFinished(), "The game must be finished");
+    }
+
+    /**
+     * #6 垂直连续4个获胜
+     */
+    public void when4VerticleConnectedThenWin() {
+        for (int row = 0; row < 3; row++) {
+            connect4.putDiscInColumn(1);//R
+            connect4.putDiscInColumn(2);//G
+        }
+        assertEquals(connect4.getWinner(), "");
+        connect4.putDiscInColumn(1);//R
+        assertEquals(connect4.getWinner(), "R");
+    }
+
+    /**
+     * #7 水平连续4个获胜
+     */
+    public void when4HorizontalConnectedThenWin() {
+        int column;
+        for (column = 0; column < 3; column++) {
+            connect4.putDiscInColumn(column);//R
+            connect4.putDiscInColumn(column);//G
+        }
+        assertEquals(connect4.getWinner(), "");
+        connect4.putDiscInColumn(column);//R
+        assertEquals(connect4.getWinner(), "R");
+    }
+
+    /**
+     * #8 对角线4个连续获胜1
+     */
+    public void when4Diagonal1ConnectedThenWin() {
+        int[] play = new int[]{1, 2, 2, 3, 4, 3, 3, 4, 4, 5, 4};
+        for (int column : play) {
+            connect4.putDiscInColumn(column);
+        }
+        assertEquals(connect4.getWinner(), "R");
+    }
+
+    /**
+     * #8 对角线4个连续获胜2
+     */
+    public void when4Diagonal2ConnectedThenWin() {
+        int[] play = new int[]{3, 4, 2, 3, 2, 2, 1, 1, 1, 1};
+        for (int column : play) {
+            connect4.putDiscInColumn(column);
+        }
+        assertEquals(connect4.getWinner(), "G");
     }
 }
