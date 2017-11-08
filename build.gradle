@@ -17,5 +17,5 @@ dependencies {
 
 test {
     useTestNG()
-    useJUnit()
+//    useJUnit()
 }
