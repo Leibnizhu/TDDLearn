@@ -2,7 +2,9 @@ package io.gitlab.leibnizhu.tddtest.ch05;
 
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.StringJoiner;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * @author Leibniz.Hu
@@ -14,14 +16,17 @@ public class Connect4TDD {
     private static final String EMPTY = " ";
     private static final String RED = "R";
     private static final String GREEN = "G";
+    private static final String DELIMITER = "|";
 
     private String[][] board = new String[ROWS][COLUMN];
     private String currentPlayer = RED;
+    private PrintStream out;
 
-    public Connect4TDD(PrintStream printStream){
-        for(String[] row : board){
+    public Connect4TDD(PrintStream out) {
+        for (String[] row : board) {
             Arrays.fill(row, EMPTY);
         }
+        this.out = out;
     }
 
     public int getNumberOfDiscs() {
@@ -36,9 +41,18 @@ public class Connect4TDD {
         checkColumn(column);
         int row = getDiscNumberOfColumn(column);
         checkPositionTOInsert(row, column);
-        board[row][column] = "X";
+        board[row][column] = currentPlayer;
         switchPlayer();
+        printBoard();
         return row;
+    }
+
+    private void printBoard() {
+        for (int row = ROWS - 1; row >= 0; row--) {
+            StringJoiner joiner = new StringJoiner(DELIMITER, DELIMITER, DELIMITER);
+            Stream.of(board[row]).forEachOrdered(joiner::add);
+            out.println(joiner.toString());
+        }
     }
 
     private void switchPlayer() {
@@ -46,18 +60,19 @@ public class Connect4TDD {
     }
 
     private void checkPositionTOInsert(int row, int column) {
-        if(row >= ROWS){
+        if (row >= ROWS) {
             throw new RuntimeException("No more room in column " + column);
         }
     }
 
     private void checkColumn(int column) {
-        if(column < 0 || column >= COLUMN){
+        if (column < 0 || column >= COLUMN) {
             throw new RuntimeException("Invalid column " + column);
         }
     }
 
     public String getCurrentPlayer() {
+        out.printf("Player %s turn", currentPlayer);
         return currentPlayer;
     }
 }
