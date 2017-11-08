@@ -1,23 +1,19 @@
 package io.gitlab.leibnizhu.tddtest.ch03;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertEquals;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * @author Leibniz.Hu
  * Created on 2017-11-07 13:09.
  */
 public class TicTacToeSpec {
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     private TicTacToe ticTacToe;
 
-    @Before
+    @BeforeMethod
     public final void before() {
         ticTacToe = new TicTacToe();
     }
@@ -25,15 +21,14 @@ public class TicTacToeSpec {
     /**
      * X边界条件
      */
-    @Test
+    @Test(expectedExceptions = RuntimeException.class)
     public void whenXOutsideBoardThenRuntimeException() {
-        exception.expect(RuntimeException.class);
         ticTacToe.play(5, 2);
 
     }
-    @Test
+
+    @Test(expectedExceptions = RuntimeException.class)
     public void whenXNegativeThenRuntimeException() {
-        exception.expect(RuntimeException.class);
         ticTacToe.play(-2, 2);
 
     }
@@ -41,24 +36,22 @@ public class TicTacToeSpec {
     /**
      * Y边界条件
      */
-    @Test
+    @Test(expectedExceptions = RuntimeException.class)
     public void whenYOutsideBoardThenRuntimeException() {
-        exception.expect(RuntimeException.class);
         ticTacToe.play(2, 5);
     }
-    @Test
+
+    @Test(expectedExceptions = RuntimeException.class)
     public void whenYNegativeThenRuntimeException() {
-        exception.expect(RuntimeException.class);
         ticTacToe.play(-1, 5);
     }
 
     /**
      * 重复下子
      */
-    @Test
+    @Test(expectedExceptions = RuntimeException.class)
     public void whenOccupiedThenRuntimeException() {
         ticTacToe.play(1, 2);
-        exception.expect(RuntimeException.class);
         ticTacToe.play(1, 2);
     }
 

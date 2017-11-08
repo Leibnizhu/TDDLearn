@@ -12,10 +12,8 @@ repositories {
 
 dependencies {
     testCompile 'org.testng:testng:6.8.21'
-    testCompile 'junit:junit:4.12'
 }
 
 test {
     useTestNG()
-//    useJUnit()
 }
