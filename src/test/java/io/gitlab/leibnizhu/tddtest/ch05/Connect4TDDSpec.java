@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -26,14 +27,14 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 初始化
+     * #1 初始化
      */
     public void whenGameStartedTheBoardIsEmpty() {
         assertEquals(connect4.getNumberOfDiscs(), 0);
     }
 
     /**
-     * 越界判定1
+     * #2 越界判定1
      */
     @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Invalid column -?\\d")
     public void whenDiscOutsideThenRuntimeException() {
@@ -42,7 +43,7 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 越界判定2
+     * #2 越界判定2
      */
     @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Invalid column -?\\d")
     public void whenDiscOutside2ThenRuntimeException() {
@@ -51,7 +52,7 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 插入返回值1
+     * #2 插入返回值1
      */
     public void whenFirstDiscInsertThenPositionIsZero() {
         int column = 1;
@@ -59,7 +60,7 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 插入返回值2
+     * #2 插入返回值2
      */
     public void whenSecondDiscInsertedThenPositionIsOne() {
         int column = 2;
@@ -68,7 +69,7 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 插入返回值3
+     * #2 插入返回值3
      */
     public void whenDiscInsertedThenNumberOfDiscIncrease() {
         int column = 3;
@@ -78,7 +79,7 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 列满判定
+     * #2 列满判定
      */
     @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "No more room in column \\d")
     public void whenNoMoreRoomInColumnThenRunTImeException() {
@@ -91,14 +92,14 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 红子先走
+     * #3 红子先走
      */
     public void whenFirstPlayThenDIscColorIsRed() {
         assertEquals(connect4.getCurrentPlayer(), "R");
     }
 
     /**
-     * 然后绿子走
+     * #3 然后绿子走
      */
     public void whenSecondPlayThenDIscColorIsGreen() {
         int column = 1;
@@ -107,7 +108,7 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 红绿交替走
+     * #3 红绿交替走
      */
     public void whenGreenPlayThenNextIsRed() {
         int column = 1;
@@ -119,7 +120,7 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 输出当前玩家
+     * #4 输出当前玩家
      */
     public void whenAskedForCurrentPlayerThenOutputNotice() {
         connect4.getCurrentPlayer();
@@ -127,11 +128,30 @@ public class Connect4TDDSpec {
     }
 
     /**
-     * 下棋后输出棋盘
+     * #4 下棋后输出棋盘
      */
     public void whenDiscInsertThenPrintBoard() {
         int column = 1;
         connect4.putDiscInColumn(column);
         assertTrue(os.toString().contains("| |R| | | | | |"));
+    }
+
+    /**
+     * #5 开始游戏时肯定未结束
+     */
+    public void whenGameStartThenNotFinished(){
+        assertFalse(connect4.isFinished(), "The game must not be finished");
+    }
+
+    /**
+     * #5 全部填满时结束
+     */
+    public void whenNoDiscCanBeInsertedThenGameIsFinished(){
+        for(int row = 0; row < 6;row++){
+            for(int column = 0; column<7;column++){
+                connect4.putDiscInColumn(column);
+            }
+        }
+        assertTrue(connect4.isFinished(), "The game must be finished");
     }
 }

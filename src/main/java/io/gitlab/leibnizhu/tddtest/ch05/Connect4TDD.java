@@ -75,4 +75,8 @@ public class Connect4TDD {
         out.printf("Player %s turn", currentPlayer);
         return currentPlayer;
     }
+
+    public boolean isFinished() {
+        return getNumberOfDiscs() == ROWS * COLUMN;
+    }
 }
